@@ -9,18 +9,34 @@ class KDTreeNode:
         self.right = None
 
     @staticmethod
+    def print_kd_tree(stack):
+        output = ""
+        if len(stack) == 0:
+            return output
+        new_stack = []
+        for kd_tree_node in stack:
+            output += str(kd_tree_node.x) + " "
+            if kd_tree_node.left is not None:
+                new_stack.append(kd_tree_node.left)
+            if kd_tree_node.right is not None:
+                new_stack.append(kd_tree_node.right)
+        output += "\n"
+        return output + KDTreeNode.print_kd_tree(new_stack)
+
+    def __repr__(self):
+        return KDTreeNode.print_kd_tree([self])
+
+    @staticmethod
     def construct(data, feature_idx):
         """ 
-        DATA: A numpy array of data.
+        DATA: A non-empty numpy array of data.
         FEATURE_IDX: The index at which the data are splited.
 
         Construct a kd-tree and return its root.
         """
 
-        print(data)
         n = data.shape[0]
         k = data.shape[1]
-        print([n, k])
         feature_column = data[:, feature_idx]
         axis_idx = np.argsort(feature_column)[n//2]
         axis = data[axis_idx]
@@ -32,8 +48,9 @@ class KDTreeNode:
         # Recursive case.
         left_nodes = []
         right_nodes = []
-        np.delete(data, axis_idx)
-        for i in range(n-1):
+        for i in range(n):
+            if i == axis_idx:
+                continue
             if data[i, feature_idx] < axis[feature_idx]:
                 left_nodes.append(data[i])
             else:
@@ -49,6 +66,7 @@ class KDTreeNode:
 
 
 if __name__ == "__main__":
-    data = np.random.rand(100, 1)
-    tree = KDTreeNode.construct(data, 0)
-    print("finish")
+    # data = np.random.rand(7, 2)
+    # tree = KDTreeNode.construct(data, 0)
+    # print(tree)
+    pass
