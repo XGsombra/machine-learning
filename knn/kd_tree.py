@@ -146,19 +146,13 @@ if __name__ == "__main__":
     f = 20
     n = 1000
     k = 15
-    target = np.random.randint(1, 20)
-    data = np.random.randint(n, f)
+    target = np.random.rand(1, 20)
+    data = np.random.rand(n, f)
 
     tree = KDTreeNode.construct(data, 0)
-
-    expected = []
-    for x in data:
-        expected.append(calculate_dist(x, target))
-    expected = np.sort(expected)
-    expected = expected[:k]
 
     actual = []
     for x in tree.find_knn(target, k):
         actual.append(calculate_dist(x, target))
 
-    print(np.allclose(expected, actual))
+    print(actual)
