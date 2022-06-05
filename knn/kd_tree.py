@@ -37,7 +37,7 @@ class KDTreeNode:
         return output + KDTreeNode.print_kd_tree(new_stack)
 
     @staticmethod
-    def construct(data, feature_idx, parent=None):
+    def construct(data, feature_idx=0, parent=None):
         """
         DATA: A non-empty numpy array of data.
         FEATURE_IDX: The index at which the data are splited.
@@ -81,12 +81,14 @@ class KDTreeNode:
         """
         curr = self
         # Search to the leaf node
-        while curr.left is not None and curr.right is not None:
-            if curr.left is None:
-                curr = curr.right
-            if curr.right is None:
-                curr = curr.left
-            curr = curr.left if x[curr.axis_feature_idx] < curr.x[curr.axis_feature_idx] else curr.right
+        while curr.left is not None or curr.right is not None:
+            if curr.left is None or curr.right is None:
+                if curr.left is None:
+                    curr = curr.right
+                if curr.right is None:
+                    curr = curr.left
+            else:
+                curr = curr.left if x[curr.axis_feature_idx] < curr.x[curr.axis_feature_idx] else curr.right
         return curr
 
     @staticmethod
@@ -101,6 +103,8 @@ class KDTreeNode:
         """
         Given a data entry x who has the same size as the kd-tree nodes,
         return a list of the top k nearest neighbors of x
+
+        Precondition: k <= size of kd-tree
         """
 
         L = []
@@ -111,10 +115,9 @@ class KDTreeNode:
             curr = curr.search(x)
             # Add the node
             searched_nodes.add(curr)
-            if len(L) < k + 1:
-                L = KDTreeNode.insert_sort(L, curr.x, x)
-                if len(L) == k + 1:
-                    L.pop()
+            L = KDTreeNode.insert_sort(L, curr.x, x)
+            if len(L) == k + 1:
+                L.pop()
             # Go up
             while True:
                 if curr.parent is None:
@@ -124,33 +127,38 @@ class KDTreeNode:
                     curr = curr.parent
                     if curr not in searched_nodes:
                         searched_nodes.add(curr)
-                        if len(L) < k + 1:
-                            L = KDTreeNode.insert_sort(L, curr.x, x)
-                            if len(L) == k + 1:
-                                L.pop()
+                        L = KDTreeNode.insert_sort(L, curr.x, x)
+                        if len(L) == k + 1:
+                            L.pop()
                         axis_feature_idx = curr.axis_feature_idx
                         dist_to_axis = abs(
                             curr.x[axis_feature_idx] - x[axis_feature_idx])
-                        if dist_to_axis >= calculate_dist(L[-1], x) and len(L) == k:
-                            continue
-                        else:
+                        if len(L) < k or dist_to_axis < calculate_dist(L[-1], x):
                             curr = curr.left if prev == curr.right else curr.right
-                            break
+                            if curr is not None:
+                                break
+                            else:
+                                curr = prev.parent
 
 
 if __name__ == "__main__":
-    data = np.random.rand(100, 5)
-    tree = KDTreeNode.construct(data, 0)
-    print(tree)
 
-    k = 6
-    target = np.array([0.5, 0.5, 0.5, 0.5, 0.5])
+    f = 20
+    n = 1000
+    k = 15
+    target = np.random.randint(1, 20)
+    data = np.random.randint(n, f)
+
+    tree = KDTreeNode.construct(data, 0)
+
     expected = []
     for x in data:
         expected.append(calculate_dist(x, target))
-    expected.sort()
-    print(expected[:k])
+    expected = np.sort(expected)
+    expected = expected[:k]
+
     actual = []
     for x in tree.find_knn(target, k):
         actual.append(calculate_dist(x, target))
-    print(actual)
+
+    print(np.allclose(expected, actual))
