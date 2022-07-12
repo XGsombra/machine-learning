@@ -44,6 +44,14 @@ $\frac{\delta L}{\delta \mathbf{w'}} = 2X'^T(Y-X'\mathbf{w'}) = \mathbf{0}  \\
 \Rightarrow X'^TY = X'^TX'\mathbf{w'} \\
 \Rightarrow \mathbf{w'} = ( X'^TX)^{-1}X'^TY$
 
+#### Extension
+
+**Polynomial regression** can be realized by fitting the linear regression model with $\mathbf{x}=[x^0 x^1 \dots x^M]$, $\mathbf{w}=[w_0 w_1 \dots w_M]$.
+
+**Lasso regression** has the cost function $L(\theta)=||Y-X\mathbf{w}||^2_2+\lambda||\mathbf{w}||_1$. It uses **$L_1$** regularization. This results in many 0's in the parameters.
+
+**Ridge regression** has the cost function $L(\theta)=||Y-X\mathbf{w}||^2_2+\lambda||\mathbf{w}||_2^2$. It uses **$L_2$** regularization. In this case, $\mathbf{w}=( X'^TX+\lambda I)^{-1}X'^TY$, and it results in small parameters.
+
 ### Regression Tree
 
 #### Alogrithm for Regression Tree
@@ -151,7 +159,11 @@ GBDT regression tree is similar to boosting regression tree when the loss functi
 
 ## Classification
 
+### K-Nearest Neighbors
+
 ### Logistic Regression  
+
+### Support Vector Machine
 
 ### Decision Tree
 
@@ -172,6 +184,32 @@ GBDT regression tree is similar to boosting regression tree when the loss functi
 
 ### Random Forest
 
+### Boosting Decision Tree (AdaBoost)
+
+### Gradient Boosting Decision Tree
+
+## Clustering
+
+### K-Means
+
+### LVQ
+
+### Gaussian Mixture Models
+
+### Linear Discriminant Analysis
+
+## Probabilitisc
+
+### Hidden Markov Chain
+
+### Condition Random Field
+
+### Markov Chain Monte Carlo
+
+#### Metropolis-Hasting Sampling
+
+#### Gibbs Sampling
+
 ## Ensemble
 
 ### Boosting
@@ -179,3 +217,15 @@ GBDT regression tree is similar to boosting regression tree when the loss functi
 #### Analysis for Boosting
 
 **AdaBoost does not overfit easily.** In many cases, when the training error approaches 0, the testing error/generalized error will increase. However, for AdaBoost, even when the training error is reduced to 0, the generalized error will continue to decrease. AdaBoost increases confidence if training continues after the training error is 0. This is because of the boosting margin, which bounds the generalized error. More [here](https://jeremykun.com/2015/09/21/the-boosting-margin-or-why-boosting-doesnt-overfit/).
+
+## General
+
+### SVD
+
+### PCA
+
+## Practices
+
+### Feature Engineering
+
+### Outliers
