@@ -220,9 +220,43 @@ GBDT regression tree is similar to boosting regression tree when the loss functi
 
 ## General
 
-### SVD
+### Singular Value Decomposition (SVD)
 
-### PCA
+#### Algorithm for SVD
+
+Let $A$ be a $m\times n$ matrix, want to find $A=U\Sigma V^T$ where left singular matrix $U$ is a $m\times m$ orthonormal matrix, $\Sigma$ is a $m \times n$ diagnoal matrix of singular values, right singular matrix $V$ is a $n\times n$ orthonormal matrix.
+
+Let $r$ be the rank of $A$.
+
+$\Sigma$ has diagonal $\lambda_1 \dots \lambda_r$ are the square roots of eigenvalues of $A^TA$, with $\lambda_1 > \lambda_2 > \dots > \lambda_r$.
+
+$U=[u_1 \dots u_r\ u_{r+1} \dots u_m]$, where $u_1 \dots u_m$ are eigenvectors of $AA^T$, $u_{r+1} \dots u_m$ are orthonormal basis of $Null(A^T)$.
+
+$V=[v_1 \dots v_r\ v_{r+1} \dots v_n]$, where $v_1 \dots v_n$ are eigenvectors of $A^TA$, $v_{r+1} \dots v_n$ are orthonormal basis of $Null(A)$.
+
+**Compacted SVD**: $A = U_r\Sigma_rV_r^T$ where $U_r$ is $m\times r$, $\Sigma_r$ is $r\times r$, $V_r^T$ is $r\times n$.
+
+**Truncated SVD**: $A\approx U_k\Sigma_kV_k^T$ where $U_k$ is $m\times k$, $\Sigma_k$ is $k\times k$, $V_k^T$ is $k\times n$, and $0<k<r$.
+
+#### Properties of SVD
+
+$UU^T = I$
+$VV^T = I$
+
+### Principal Component Analysis
+
+#### Algorithm for PCA
+
+Let $X=[x_1\dots x_n]$ be $m \times n$.
+
+1. Normalize all inputs: $x_i = \frac{x_i-\mu}{\sigma}$
+2. Calculate the covariance matrix $\Sigma = E[(X-\mathbf{\mu})(X-\mathbf{\mu})^T] = XX^T$ since $X$ is preprocessed in step 1.
+3. Find the eigenvalues $\lambda_1 >\lambda_2>\dots >\lambda_m$ of $\Sigma$ and corresponding eigenvectors $\mathbf{w_1} \dots \mathbf{w_m}$.
+4. Return the $m\times k$ matrix $W=[\mathbf{w_1} \dots \mathbf{w_k}]$ as the projection matrix.
+
+Matrix projection can be realized by doing **$y=W^Tx$**.
+
+#### Kernel Principal Component Analysis
 
 ## Practices
 
